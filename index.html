@@ -6,7 +6,7 @@
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<title>Маникюр</title>
+<title>Запись на маникюр</title>
 
 <style>
 body {
@@ -16,9 +16,10 @@ body {
   color: #222;
 }
 
+/* Заголовок */
 .header {
-  padding: 25px 20px 10px;
-  font-size: 26px;
+  padding: 25px 20px 5px;
+  font-size: 28px;
   font-weight: 700;
 }
 
@@ -28,10 +29,12 @@ body {
   font-size: 14px;
 }
 
+/* Контейнер */
 .container {
   padding: 20px;
 }
 
+/* Карточки */
 .card {
   background: #fff;
   border-radius: 20px;
@@ -43,18 +46,73 @@ body {
 .label {
   font-size: 14px;
   color: #888;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
-input, select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid #eee;
-  font-size: 16px;
-  margin-bottom: 10px;
+/* Пикеры */
+.picker-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }
 
+.picker {
+  width: 48%;
+  height: 140px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  text-align: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  border-radius: 16px;
+  background: #fdf2f7;
+  box-shadow: inset 0 0 14px rgba(244,167,185,0.35);
+}
+
+.picker::-webkit-scrollbar {
+  display: none;
+}
+
+.picker div {
+  padding: 10px 0;
+  font-size: 18px;
+  color: #444;
+  transition: 0.2s;
+}
+
+.picker div.active {
+  font-size: 22px;
+  font-weight: 600;
+  color: #f4a7b9;
+}
+
+/* Время */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.time {
+  padding: 12px;
+  text-align: center;
+  border-radius: 12px;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.time.active {
+  background: #f4a7b9;
+  color: white;
+  box-shadow: 0 4px 10px rgba(244,167,185,0.4);
+}
+
+/* Кнопка */
 button {
   width: 100%;
   padding: 16px;
@@ -72,38 +130,23 @@ button:active {
   transform: scale(0.98);
 }
 
-.time-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.time {
-  padding: 12px;
-  text-align: center;
-  border-radius: 12px;
-  background: #f8f8f8;
-  cursor: pointer;
-}
-
-.time.active {
-  background: #f4a7b9;
-  color: white;
-}
-
 </style>
 </head>
 
 <body>
 
 <div class="header">Запись 💅</div>
-<div class="sub">Выберите удобное время</div>
+<div class="sub">Выберите дату и время</div>
 
 <div class="container">
 
   <div class="card">
     <div class="label">Дата</div>
-    <input type="date" id="date">
+
+    <div class="picker-row">
+      <div class="picker" id="dayPicker"></div>
+      <div class="picker" id="monthPicker"></div>
+    </div>
   </div>
 
   <div class="card">
@@ -123,7 +166,39 @@ button:active {
 
 <script>
 
-let selectedTime = "";
+// ==== ПИКЕРЫ ====
+
+const days = Array.from({length: 31}, (_, i) => i + 1);
+const months = [
+  "Январь","Февраль","Март","Апрель","Май","Июнь",
+  "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
+];
+
+let selectedDay = null;
+let selectedMonth = null;
+let selectedTime = null;
+
+function buildPicker(list, pickerId, onSelect) {
+  const picker = document.getElementById(pickerId);
+
+  list.forEach((item) => {
+    const div = document.createElement("div");
+    div.innerText = item;
+
+    div.onclick = () => {
+      [...picker.children].forEach(d => d.classList.remove("active"));
+      div.classList.add("active");
+      onSelect(item);
+    };
+
+    picker.appendChild(div);
+  });
+}
+
+buildPicker(days, "dayPicker", (d) => selectedDay = d);
+buildPicker(months, "monthPicker", (m) => selectedMonth = m);
+
+// ==== ВРЕМЯ ====
 
 function selectTime(el){
   document.querySelectorAll('.time').forEach(t => t.classList.remove('active'));
@@ -131,16 +206,18 @@ function selectTime(el){
   selectedTime = el.innerText;
 }
 
-function sendBooking(){
-  const date = document.getElementById("date").value;
+// ==== ОТПРАВКА ====
 
-  if(!date || !selectedTime){
-    alert("Выберите дату и время");
+function sendBooking(){
+
+  if(!selectedDay || !selectedMonth || !selectedTime){
+    alert("Выберите день, месяц и время");
     return;
   }
 
   const data = {
-    date: date,
+    day: selectedDay,
+    month: selectedMonth,
     time: selectedTime
   };
 
