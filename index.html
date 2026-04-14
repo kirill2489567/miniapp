@@ -154,7 +154,7 @@ function send(){
   const date = document.getElementById("date").value;
 
   if(!selectedService || !selectedTime || !date){
-    alert("Выбери всё 💅");
+    Telegram.WebApp.showAlert("Выберите услугу, дату и время 💗");
     return;
   }
 
@@ -165,7 +165,15 @@ function send(){
   };
 
   Telegram.WebApp.sendData(JSON.stringify(data));
-  Telegram.WebApp.close();
+
+  Telegram.WebApp.showAlert(`💖 Запись создана!
+📅 ${date}
+⏰ ${selectedTime}
+💅 ${selectedService}`);
+
+  setTimeout(() => {
+    Telegram.WebApp.close();
+  }, 500);
 }
 
 </script>
