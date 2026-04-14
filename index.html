@@ -3,157 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Запись на маникюр</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<title>Запись 💅</title>
 
 <style>
-  body {
-    margin: 0;
-    background: #ffeef6;
-    font-family: "Inter", sans-serif;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+body {
+  margin: 0;
+  font-family: -apple-system, sans-serif;
+  background: linear-gradient(180deg, #fff, #ffeaf3);
+  color: #222;
+}
 
-  header {
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    font-size: 1.7em;
-    font-weight: 600;
-    background: linear-gradient(135deg, #ff9acb, #ff74aa);
-    color: white;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    box-shadow: 0 5px 10px rgba(255, 120, 170, 0.3);
-  }
+.header {
+  padding: 30px 20px 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff6fa5;
+}
 
-  .container {
-    width: 90%;
-    max-width: 420px;
-    margin-top: 25px;
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(255, 120, 170, 0.2);
-    animation: fadeIn 0.6s ease;
-  }
+.sub {
+  padding: 0 20px;
+  color: #888;
+  font-size: 14px;
+}
 
-  h2 {
-    color: #ff74aa;
-    margin-bottom: 10px;
-    text-align: center;
-  }
+.container {
+  padding: 20px;
+}
 
-  label {
-    font-weight: 600;
-    margin-top: 10px;
-    display: block;
-  }
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 10px 25px rgba(255,120,170,0.2);
+}
 
-  select, input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
-    border: 2px solid #ffc7df;
-    background: #fff8fc;
-    margin-top: 5px;
-    font-size: 1em;
-    outline: none;
-    transition: 0.3s;
-  }
+.label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
 
-  select:focus, input:focus {
-    border-color: #ff74aa;
-  }
+/* услуги */
+.service {
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff0f6;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
 
-  .btn {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.2em;
-    background: linear-gradient(135deg, #ff74aa, #ff4990);
-    border: none;
-    color: white;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 4px 10px rgba(255, 80, 150, 0.3);
-  }
+.service.active {
+  background: #ff74aa;
+  color: white;
+}
 
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 80, 150, 0.4);
-  }
+/* время */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(15px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
+.time {
+  padding: 12px;
+  text-align: center;
+  border-radius: 12px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.time.active {
+  background: #ff74aa;
+  color: white;
+}
+
+/* кнопка */
+button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #ff9acb, #ff4d94);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(255,120,170,0.4);
+}
 </style>
 </head>
 
 <body>
 
-<header>Запись на маникюр 💅</header>
+<div class="header">Запись 💅</div>
+<div class="sub">Мастер Кристина</div>
 
 <div class="container">
-  <h2>Выберите услугу</h2>
 
-  <label>Услуга:</label>
-  <select id="serviceInput">
-    <option value="">Выберите услугу</option>
-    <option value="Маникюр — 1200">Маникюр — 1200</option>
-    <option value="Маникюр + покрытие — 1800">Маникюр + покрытие — 1800</option>
-    <option value="Наращивание — 2500">Наращивание — 2500</option>
-    <option value="Снятие — 400">Снятие — 400</option>
-  </select>
+  <div class="card">
+    <div class="label">Услуга</div>
 
-  <h2>Выберите дату и время</h2>
+    <div class="service" onclick="selectService(this)">Маникюр — 1200</div>
+    <div class="service" onclick="selectService(this)">Маникюр + покрытие — 1800</div>
+    <div class="service" onclick="selectService(this)">Наращивание — 2500</div>
+    <div class="service" onclick="selectService(this)">Снятие — 400</div>
+  </div>
 
-  <label>Дата:</label>
-  <input type="date" id="dateInput">
+  <div class="card">
+    <div class="label">Дата</div>
+    <input type="date" id="date" style="width:100%; padding:12px; border-radius:12px; border:1px solid #ddd;">
+  </div>
 
-  <label>Время:</label>
-  <select id="timeInput">
-    <option value="">Выберите время</option>
-    <option>10:00</option>
-    <option>12:00</option>
-    <option>14:00</option>
-    <option>16:00</option>
-    <option>18:00</option>
-  </select>
+  <div class="card">
+    <div class="label">Время</div>
+    <div class="time-grid">
+      <div class="time" onclick="selectTime(this)">10:00</div>
+      <div class="time" onclick="selectTime(this)">12:00</div>
+      <div class="time" onclick="selectTime(this)">14:00</div>
+      <div class="time" onclick="selectTime(this)">16:00</div>
+      <div class="time" onclick="selectTime(this)">18:00</div>
+    </div>
+  </div>
 
-  <button class="btn" onclick="sendBooking()">Записаться 💗</button>
+  <button onclick="send()">Записаться 💗</button>
+
 </div>
 
 <script>
-  function sendBooking() {
-    const date = document.getElementById("dateInput").value;
-    const time = document.getElementById("timeInput").value;
-    const service = document.getElementById("serviceInput").value;
 
-    if (!service || !date || !time) {
-      alert("Пожалуйста, выберите услугу, дату и время 🌸");
-      return;
-    }
+let selectedService = null;
+let selectedTime = null;
 
-    const data = {
-      date: date,
-      time: time,
-      service: service
-    };
+function selectService(el){
+  document.querySelectorAll('.service').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  selectedService = el.innerText;
+}
 
-    if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.sendData(JSON.stringify(data));
-    }
+function selectTime(el){
+  document.querySelectorAll('.time').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  selectedTime = el.innerText;
+}
 
-    alert("Ты записана! 💖\n" + service + "\n" + date + " в " + time);
+function send(){
+
+  const date = document.getElementById("date").value;
+
+  if(!selectedService || !selectedTime || !date){
+    alert("Выбери всё 💅");
+    return;
   }
-</script>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  const data = {
+    service: selectedService,
+    date: date,
+    time: selectedTime
+  };
+
+  Telegram.WebApp.sendData(JSON.stringify(data));
+  Telegram.WebApp.close();
+}
+
+</script>
 
 </body>
 </html>
