@@ -164,6 +164,20 @@ function send(){
     time: selectedTime
   };
 
+  console.log("📤 ОТПРАВКА:", data); // лог в браузер
+  Telegram.WebApp.sendData(JSON.stringify(data));
+
+  Telegram.WebApp.showAlert(`💖 Запись создана!
+📅 ${date}
+⏰ ${selectedTime}
+💅 ${selectedService}`);
+
+  // ❗ задержка нужна, чтобы данные успели дойти до бота
+  setTimeout(() => {
+    Telegram.WebApp.close();
+  }, 1000);
+}
+
   Telegram.WebApp.sendData(JSON.stringify(data));
 
   Telegram.WebApp.showAlert(`💖 Запись создана!
