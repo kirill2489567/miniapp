@@ -3,231 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <title>Запись на маникюр</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #fff;
-  color: #222;
-}
+  body {
+    margin: 0;
+    background: #ffeef6;
+    font-family: "Inter", sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-/* Заголовок */
-.header {
-  padding: 25px 20px 5px;
-  font-size: 28px;
-  font-weight: 700;
-}
+  header {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.7em;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff9acb, #ff74aa);
+    color: white;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 5px 10px rgba(255, 120, 170, 0.3);
+  }
 
-.sub {
-  padding: 0 20px;
-  color: #888;
-  font-size: 14px;
-}
+  .container {
+    width: 90%;
+    max-width: 420px;
+    margin-top: 25px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(255, 120, 170, 0.2);
+    animation: fadeIn 0.6s ease;
+  }
 
-/* Контейнер */
-.container {
-  padding: 20px;
-}
+  h2 {
+    color: #ff74aa;
+    margin-bottom: 10px;
+    text-align: center;
+  }
 
-/* Карточки */
-.card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 18px;
-  margin-bottom: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-}
+  label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+  }
 
-.label {
-  font-size: 14px;
-  color: #888;
-  margin-bottom: 8px;
-}
+  select, input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #ffc7df;
+    background: #fff8fc;
+    margin-top: 5px;
+    font-size: 1em;
+    outline: none;
+    transition: 0.3s;
+  }
 
-/* Пикеры */
-.picker-row {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
+  select:focus, input:focus {
+    border-color: #ff74aa;
+  }
 
-.picker {
-  width: 48%;
-  height: 140px;
-  overflow-y: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  .btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, #ff74aa, #ff4990);
+    border: none;
+    color: white;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(255, 80, 150, 0.3);
+  }
 
-  text-align: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 80, 150, 0.4);
+  }
 
-  border-radius: 16px;
-  background: #fdf2f7;
-  box-shadow: inset 0 0 14px rgba(244,167,185,0.35);
-}
-
-.picker::-webkit-scrollbar {
-  display: none;
-}
-
-.picker div {
-  padding: 10px 0;
-  font-size: 18px;
-  color: #444;
-  transition: 0.2s;
-}
-
-.picker div.active {
-  font-size: 22px;
-  font-weight: 600;
-  color: #f4a7b9;
-}
-
-/* Время */
-.time-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.time {
-  padding: 12px;
-  text-align: center;
-  border-radius: 12px;
-  background: #f8f8f8;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: 500;
-}
-
-.time.active {
-  background: #f4a7b9;
-  color: white;
-  box-shadow: 0 4px 10px rgba(244,167,185,0.4);
-}
-
-/* Кнопка */
-button {
-  width: 100%;
-  padding: 16px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #f8cdda, #f4a7b9);
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-  box-shadow: 0 8px 20px rgba(244,167,185,0.4);
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
 </style>
 </head>
 
 <body>
 
-<div class="header">Запись 💅</div>
-<div class="sub">Выберите дату и время</div>
+<header>Запись на маникюр 💅</header>
 
 <div class="container">
+  <h2>Выберите услугу</h2>
 
-  <div class="card">
-    <div class="label">Дата</div>
+  <label>Услуга:</label>
+  <select id="serviceInput">
+    <option value="">Выберите услугу</option>
+    <option value="Маникюр — 1200">Маникюр — 1200</option>
+    <option value="Маникюр + покрытие — 1800">Маникюр + покрытие — 1800</option>
+    <option value="Наращивание — 2500">Наращивание — 2500</option>
+    <option value="Снятие — 400">Снятие — 400</option>
+  </select>
 
-    <div class="picker-row">
-      <div class="picker" id="dayPicker"></div>
-      <div class="picker" id="monthPicker"></div>
-    </div>
-  </div>
+  <h2>Выберите дату и время</h2>
 
-  <div class="card">
-    <div class="label">Время</div>
-    <div class="time-grid">
-      <div class="time" onclick="selectTime(this)">10:00</div>
-      <div class="time" onclick="selectTime(this)">12:00</div>
-      <div class="time" onclick="selectTime(this)">14:00</div>
-      <div class="time" onclick="selectTime(this)">16:00</div>
-      <div class="time" onclick="selectTime(this)">18:00</div>
-    </div>
-  </div>
+  <label>Дата:</label>
+  <input type="date" id="dateInput">
 
-  <button onclick="sendBooking()">Записаться</button>
+  <label>Время:</label>
+  <select id="timeInput">
+    <option value="">Выберите время</option>
+    <option>10:00</option>
+    <option>12:00</option>
+    <option>14:00</option>
+    <option>16:00</option>
+    <option>18:00</option>
+  </select>
 
+  <button class="btn" onclick="sendBooking()">Записаться 💗</button>
 </div>
 
 <script>
+  function sendBooking() {
+    const date = document.getElementById("dateInput").value;
+    const time = document.getElementById("timeInput").value;
+    const service = document.getElementById("serviceInput").value;
 
-// ==== ПИКЕРЫ ====
+    if (!service || !date || !time) {
+      alert("Пожалуйста, выберите услугу, дату и время 🌸");
+      return;
+    }
 
-const days = Array.from({length: 31}, (_, i) => i + 1);
-const months = [
-  "Январь","Февраль","Март","Апрель","Май","Июнь",
-  "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
-];
-
-let selectedDay = null;
-let selectedMonth = null;
-let selectedTime = null;
-
-function buildPicker(list, pickerId, onSelect) {
-  const picker = document.getElementById(pickerId);
-
-  list.forEach((item) => {
-    const div = document.createElement("div");
-    div.innerText = item;
-
-    div.onclick = () => {
-      [...picker.children].forEach(d => d.classList.remove("active"));
-      div.classList.add("active");
-      onSelect(item);
+    const data = {
+      date: date,
+      time: time,
+      service: service
     };
 
-    picker.appendChild(div);
-  });
-}
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.sendData(JSON.stringify(data));
+    }
 
-buildPicker(days, "dayPicker", (d) => selectedDay = d);
-buildPicker(months, "monthPicker", (m) => selectedMonth = m);
-
-// ==== ВРЕМЯ ====
-
-function selectTime(el){
-  document.querySelectorAll('.time').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  selectedTime = el.innerText;
-}
-
-// ==== ОТПРАВКА ====
-
-function sendBooking(){
-
-  if(!selectedDay || !selectedMonth || !selectedTime){
-    alert("Выберите день, месяц и время");
-    return;
+    alert("Ты записана! 💖\n" + service + "\n" + date + " в " + time);
   }
-
-  const data = {
-    day: selectedDay,
-    month: selectedMonth,
-    time: selectedTime
-  };
-
-  Telegram.WebApp.sendData(JSON.stringify(data));
-  Telegram.WebApp.close();
-}
-
-Telegram.WebApp.ready();
-
 </script>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 </body>
 </html>
